@@ -1,4 +1,4 @@
-<?php 
+<?php
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -75,12 +75,14 @@ class qformat_simplecsv extends qformat_default {
 
             $question = $this->defaultquestion();
             
-            if(!is_array($row) || empty($row[0])) { continue; }
+            if (!is_array($row) || empty($row[0])) {
+                continue;
+            }
             
             // CATEGORY
             if ($this->catfromfile) {
                 $newcategory = addslashes(htmlspecialchars(array_shift($row)));
-                if(!isset($category) || $category != $newcategory) {
+                if (!isset($category) || $category != $newcategory) {
                     $category = $newcategory;
                     $question->qtype = 'category';
                     $question->category = $category;
@@ -92,16 +94,18 @@ class qformat_simplecsv extends qformat_default {
                     unset($newcategory);
                 }
             }
-            
+
             // build new question
             $question->qtype = 'multichoice';
             $question->single = 1; // one CA default
             $question->questiontext = addslashes(htmlspecialchars(array_shift($row)));
             $question->questiontextformat = FORMAT_HTML;
             // skip row if empty
-            if(empty($question->questiontext)) {
+            if (empty($question->questiontext)) {
                 // recall newcategory creation for this row
-                if ($this->catfromfile && isset($newcategory)) { array_pop($questions); }
+                if ($this->catfromfile && isset($newcategory)) { 
+                    array_pop($questions); 
+                }
                 continue;
             }
             $question->name = $this->create_default_question_name($question->questiontext, '');
@@ -117,40 +121,40 @@ class qformat_simplecsv extends qformat_default {
 
             foreach ($row as $field) {
                 // empty filed breakes CAs and starts WAs
-                if(empty($field)) {
+                if (empty($field)) {
                     $ca_collected = true;
                     continue;
                 }
-                if(!$ca_collected) {
+                if (!$ca_collected) {
                     $correct_answers[] = $field;
                 } else {
                     $wrong_answers[] = $field;
                 }
             }
-           
+
             // skip row if  CAa or WAs empty
-            if(empty($correct_answers) || empty($wrong_answers)) {
+            if (empty($correct_answers) || empty($wrong_answers)) {
                 // recall newcategory creation for this row
                 if ($this->catfromfile && isset($newcategory)) { array_pop($questions); }
                 continue;
             }
 
             $ca_cnt = count($correct_answers);
-           
+
             // more than one CA case
-            if($ca_cnt > 1) {
+            if ($ca_cnt > 1) {
                 $question->single = 0;
                 $ca_fraction = 1 / $ca_cnt;
             }
 
             // make answers from CAs and WAs
-            foreach($correct_answers as $answer) {
+            foreach ($correct_answers as $answer) {
                  $this->answer_push($question, $answer, $ca_fraction);
             }
-            foreach($wrong_answers as $answer) {
+            foreach ($wrong_answers as $answer) {
                  $this->answer_push($question, $answer);
             }
-          
+
             $questions[] = $question;
 
         }
