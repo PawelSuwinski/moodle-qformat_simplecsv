@@ -26,7 +26,8 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'qformat_simplecsv';
 $plugin->version   = 2020080500;
+$plugin->release   = '1.0.0';
 
-$plugin->requires  = 2020060900;
+$plugin->requires  = 2018120300;
 
 $plugin->maturity  = MATURITY_STABLE;
