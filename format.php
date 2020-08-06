@@ -14,34 +14,30 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
-/*
- * Simple CSV question format
- *
- * @package    qformat_simplecsv
- * @copyright  2020 Paweł Suwiński
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 defined('MOODLE_INTERNAL') || die();
 
-
 /**
- * Simple CSV - a simple format for creating multiple choice questions with one
- * or more correct answers and no feedback using tables in any spreadsheet by
- * saving it as plain/csv file.
+ * Simple CSV question format
+ *
+ * A simple format for fast and easy creating multiple choice questions with
+ * one or more correct answers and no feedback using tables in any spreadsheet
+ * by saving it as plain/csv file.
  *
  * The format looks like this:
  *
  * "Category","Question text","CA 1",...,"CA n","","WA 1", ... ,"WA m"
-
- * That is,
- *  + CA - Correct Answer, WA - Wrong Answer
- *  + one question - one row
- *  + en empty cell sepparates correct answers from wrong ones
- *  + category column is optional and it is used when selected during import
- *  + numbers of CAs and WAs may differ from each other inside the row and between rows
  *
+ * That is,
+ *
+ *  - CA - Correct Answer, WA - Wrong Answer
+ *  - one question - one row
+ *  - en empty cell sepparates correct answers from wrong ones
+ *  - category column is optional and it is used when selected during import
+ *  - numbers of CAs and WAs may differ from each other inside the row and between rows
+ *
+ *  @package    qformat_simplecsv
+ * @copyright  2020 Paweł Suwiński
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class qformat_simplecsv extends qformat_default {
 
@@ -74,11 +70,11 @@ class qformat_simplecsv extends qformat_default {
         foreach ($lines as $row) {
 
             $question = $this->defaultquestion();
-            
+
             if (!is_array($row) || empty($row[0])) {
                 continue;
             }
-            
+
             // CATEGORY
             if ($this->catfromfile) {
                 $newcategory = addslashes(htmlspecialchars(array_shift($row)));
@@ -90,7 +86,7 @@ class qformat_simplecsv extends qformat_default {
 
                     // Clear array for next question set
                     $question = $this->defaultquestion();
-                }else{
+                } else {
                     unset($newcategory);
                 }
             }
@@ -103,8 +99,8 @@ class qformat_simplecsv extends qformat_default {
             // skip row if empty
             if (empty($question->questiontext)) {
                 // recall newcategory creation for this row
-                if ($this->catfromfile && isset($newcategory)) { 
-                    array_pop($questions); 
+                if ($this->catfromfile && isset($newcategory)) {
+                    array_pop($questions);
                 }
                 continue;
             }
@@ -135,7 +131,9 @@ class qformat_simplecsv extends qformat_default {
             // skip row if  CAa or WAs empty
             if (empty($correct_answers) || empty($wrong_answers)) {
                 // recall newcategory creation for this row
-                if ($this->catfromfile && isset($newcategory)) { array_pop($questions); }
+                if ($this->catfromfile && isset($newcategory)) {
+                    array_pop($questions);
+                }
                 continue;
             }
 
