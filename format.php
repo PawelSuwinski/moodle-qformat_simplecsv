@@ -35,8 +35,9 @@ defined('MOODLE_INTERNAL') || die();
 
 
 /**
- * CSV format - a simple format for creating multiple choice questions with 
- * one or more correct choices and no feedback with some spreadsheet using tables
+ * Simple CSV - a simple format for creating multiple choice questions with one
+ * or more correct answers and no feedback using tables in any spreadsheet by
+ * saving it as plain/csv file.
  *
  * The format looks like this:
  * 
