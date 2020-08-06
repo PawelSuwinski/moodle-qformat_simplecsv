@@ -35,7 +35,7 @@ defined('MOODLE_INTERNAL') || die();
  *  - category column is optional and it is used when selected during import
  *  - numbers of CAs and WAs may differ from each other inside the row and between rows
  *
- *  @package    qformat_simplecsv
+ * @package    qformat_simplecsv
  * @copyright  2020 Paweł Suwiński
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
