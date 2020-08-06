@@ -18,7 +18,7 @@
  * Version information for the calculated question type.
  *
  * @package    qformat_simplecsv
- * @copyright  2020 Paweł Suwiński 
+ * @copyright  2020 Paweł Suwiński
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
