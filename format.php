@@ -40,7 +40,7 @@ defined('MOODLE_INTERNAL') || die();
  *
  * The format looks like this:
  * 
- * "Category";"Question text";"CA 1";...;"CA n";"";"WA 1"; ... ;"WA m"
+ * "Category","Question text","CA 1",...,"CA n","","WA 1", ... ,"WA m"
 
  * That is,
  *  + CA - Correct Answer, WA - Wrong Answer
