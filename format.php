@@ -41,8 +41,8 @@ defined('MOODLE_INTERNAL') || die();
  */
 class qformat_simplecsv extends qformat_default {
 
-    public static $csv_delimiter = ',';
-    public static $csv_enclosure = '"';
+    public static $csvdelimiter = ',';
+    public static $csvenclosure = '"';
 
     public function provide_import() {
         return true;
@@ -56,8 +56,8 @@ class qformat_simplecsv extends qformat_default {
         if (($handle = fopen($filename, "r")) === false) {
             return false;
         }
-        while (($data = fgetcsv($handle, 4096, self::$csv_delimiter,
-                self::$csv_enclosure)) !== false) {
+        while (($data = fgetcsv($handle, 4096, self::$csvdelimiter,
+                self::$csvenclosure)) !== false) {
             $filearray[] = $data;
         }
         fclose($handle);
@@ -75,7 +75,7 @@ class qformat_simplecsv extends qformat_default {
                 continue;
             }
 
-            // CATEGORY
+            // Category processing.
             if ($this->catfromfile) {
                 $newcategory = addslashes(htmlspecialchars(array_shift($row)));
                 if (!isset($category) || $category != $newcategory) {
@@ -84,21 +84,21 @@ class qformat_simplecsv extends qformat_default {
                     $question->category = $category;
                     $questions[] = $question;
 
-                    // Clear array for next question set
+                    // Clear array for next question set.
                     $question = $this->defaultquestion();
                 } else {
                     unset($newcategory);
                 }
             }
 
-            // build new question
+            // Build a new question.
             $question->qtype = 'multichoice';
-            $question->single = 1; // one CA default
+            $question->single = 1; // One CA by default.
             $question->questiontext = addslashes(htmlspecialchars(array_shift($row)));
             $question->questiontextformat = FORMAT_HTML;
-            // skip row if empty
+            // Skip row if empty.
             if (empty($question->questiontext)) {
-                // recall newcategory creation for this row
+                // Recall newcategory creation for this row.
                 if ($this->catfromfile && isset($newcategory)) {
                     array_pop($questions);
                 }
@@ -109,47 +109,47 @@ class qformat_simplecsv extends qformat_default {
             $question->fraction = array();
             $question->feedback = array();
 
-            // collect CORRECT ANSWERS and WRONG ANSWERS
-            $ca_fraction = 1; // correct answer fraction for single = 1
-            $correct_answers = array();
-            $wrong_answers = array();
-            $ca_collected = false;
+            // Collect CORRECT ANSWERS and WRONG ANSWERS.
+            $cafraction = 1; // Correct answer fraction for single = 1.
+            $correctanswers = array();
+            $wronganswers = array();
+            $cacollected = false;
 
             foreach ($row as $field) {
-                // empty filed breakes CAs and starts WAs
+                // Empty filed breakes CAs and starts WAs.
                 if (empty($field)) {
-                    $ca_collected = true;
+                    $cacollected = true;
                     continue;
                 }
-                if (!$ca_collected) {
-                    $correct_answers[] = $field;
+                if (!$cacollected) {
+                    $correctanswers[] = $field;
                 } else {
-                    $wrong_answers[] = $field;
+                    $wronganswers[] = $field;
                 }
             }
 
-            // skip row if  CAa or WAs empty
-            if (empty($correct_answers) || empty($wrong_answers)) {
-                // recall newcategory creation for this row
+            // Skip row if  CAa or WAs empty.
+            if (empty($correctanswers) || empty($wronganswers)) {
+                // Recall newcategory creation for this row.
                 if ($this->catfromfile && isset($newcategory)) {
                     array_pop($questions);
                 }
                 continue;
             }
 
-            $ca_cnt = count($correct_answers);
+            $cacnt = count($correctanswers);
 
-            // more than one CA case
-            if ($ca_cnt > 1) {
+            // More than one CA case.
+            if ($cacnt > 1) {
                 $question->single = 0;
-                $ca_fraction = 1 / $ca_cnt;
+                $cafraction = 1 / $cacnt;
             }
 
-            // make answers from CAs and WAs
-            foreach ($correct_answers as $answer) {
-                 $this->answer_push($question, $answer, $ca_fraction);
+            // Make answers from CAs and WAs.
+            foreach ($correctanswers as $answer) {
+                 $this->answer_push($question, $answer, $cafraction);
             }
-            foreach ($wrong_answers as $answer) {
+            foreach ($wronganswers as $answer) {
                  $this->answer_push($question, $answer);
             }
 
@@ -175,7 +175,6 @@ class qformat_simplecsv extends qformat_default {
     }
 
     protected function readquestion($lines) {
-        // this is no longer needed but might still be called by default.php
         return;
     }
 }
